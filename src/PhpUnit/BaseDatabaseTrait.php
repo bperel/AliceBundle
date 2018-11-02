@@ -45,11 +45,6 @@ trait BaseDatabaseTrait
     protected static $shard;
 
     /**
-     * @var string|null The name of the Doctrine connection to use
-     */
-    protected static $connection;
-
-    /**
      * @var array|null Contain loaded fixture from alice
      */
     protected static $fixtures;
