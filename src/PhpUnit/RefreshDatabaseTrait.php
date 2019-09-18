@@ -36,7 +36,9 @@ trait RefreshDatabaseTrait
         }
 
         $container = static::$container ?? static::$kernel->getContainer();
-        $container->get('doctrine')->getConnection(static::$connection)->beginTransaction();
+        foreach ($container->get('doctrine')->getConnections() as $connection) {
+            $connection->beginTransaction();
+        }
 
         return $kernel;
     }
@@ -49,9 +51,10 @@ trait RefreshDatabaseTrait
         }
 
         if (null !== $container) {
-            $connection = $container->get('doctrine')->getConnection(static::$connection);
-            if ($connection->isTransactionActive()) {
-                $connection->rollback();
+            foreach ($container->get('doctrine')->getConnections() as $connection) {
+                if ($connection->isTransactionActive()) {
+                    $connection->rollback();
+                }
             }
         }
 
